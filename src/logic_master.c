@@ -26,6 +26,10 @@ typedef enum {
 eTrafficState gTrafficState = STATE_PRE_WAIT;
 #endif
 
+const tTrafficLED code TRAFFIC_STOP_LED_COLOR	=	{0xFF, 0, 0};
+const tTrafficLED code TRAFFIC_WAIT_LED_COLOR	=	{0x66, 0x33, 0};
+const tTrafficLED code TRAFFIC_GO_LED_COLOR	=	{0, 0xFF, 0};
+
 uint8_t gLaneIdx = 0;
 tTrafficLED garru8LightState[TRAFFIC_LIGHT_MAX_LANES];
 uint8_t gTrafficTickCounter = 0;	//for init, we want to start the logic as quick as possible
@@ -43,15 +47,15 @@ void logicMasterInit(void)
 	logicMasterUpdateLights();
 }
 
-void logicMasterUpdateLights(void)
+void logicMasterUpdateLights(void) using 2
 {
 	uint8_t* pu8 = (uint8_t*)&garru8LightState;
 	uint8_t i = TRAFFIC_LIGHT_MAX_LANES;
 	while(i--)
 	{
-		drvLed1Byte(*pu8++);
-		drvLed1Byte(*pu8++);
-		drvLed1Byte(*pu8++);
+		//uint8_t r=*pu8++,g=*pu8++,b=*pu8++;
+		drvLed1Byte(pu8[0],pu8[1],pu8[2]);
+		pu8 += 3;
 	}
 }
 

@@ -18,12 +18,18 @@
 #include "driver.h"
 
 // comment out to use non-state machine based logic
-//#define TRAFFIC_LOGIC_STATE_MACHINE
+#define TRAFFIC_LOGIC_STATE_MACHINE
 
 #define TRAFFIC_LIGHT_MAX_LANES		4
 
-#define TRAFFIC_SIGNAL_CHANGE_TIMEOUT	10	/*10 second; min:1s, max:254s*/
-#define TRAFFIC_LANE_CHANGE_TIMEOUT		60	/*1 minute; min:1s, max:254s*/
+#define TRAFFIC_SIGNAL_CHANGE_TIMEOUT	1	/*10 second; min:1s, max:254s*/
+#define TRAFFIC_LANE_CHANGE_TIMEOUT		8	/*1 minute; min:1s, max:254s*/
+
+typedef uint8_t tTrafficLED[BYTES_PER_LED];
+
+extern const tTrafficLED code TRAFFIC_STOP_LED_COLOR;
+extern const tTrafficLED code TRAFFIC_WAIT_LED_COLOR;
+extern const tTrafficLED code TRAFFIC_GO_LED_COLOR;
 
 void logicMasterInit(void);
 uint8_t logicMasterGetNextLane(void);

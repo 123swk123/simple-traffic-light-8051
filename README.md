@@ -6,13 +6,13 @@ This is a very simple traffic light controller, there are 2 implementation style
 2. non-state machine base, comment out the macro `TRAFFIC_LOGIC_STATE_MACHINE` in [logic_master.h](src/logic_master.h#L21)
 
 ## The Hardware
-1. Nuvoton MS51FB9AE x1 no
+1. Nuvoton MS51FB9AE x1 nos
 2. WS2811 smart LED x4 nos
 
 *Operating voltage: 5V*
 
 ### Schematic
-
+![Schematic](docs/schematic.png)
 
 ## Design
 
@@ -20,7 +20,7 @@ We use smart RGB single LED for each road to show the signal status to the user.
 These smart LEDs uses 3 color channel Red,Green & Blue; 8bit for each color channel so 24bit in total
 they are packed in the following format R7..R0, G7..G0, B7..B0
 
-The color code can be found here [driver.c](src/driver.c#L18), which implements the following table
+The color code can be found here [driver.c](src/logic_master.c#L29), which implements the following table
 
 |Signal status|Color|Color code|Const name|
 |-|-|-|-|
@@ -45,5 +45,5 @@ we use simple bit-bang written in 8051 assembly language. you can find the LED s
 - Signal change wait time macro [`TRAFFIC_SIGNAL_CHANGE_TIMEOUT`](src/logic_master.h#L25) defined in seconds, default value 10 seconds
   transition time between WAIT-to-STOP or WAIT-to-GO
 - Number of roads/lanes [`TRAFFIC_LIGHT_MAX_LANES`](src/logic_master.h#L23), default value 4
-- [LED color mapping](src/driver.c#L18)
+- [LED color mapping](src/logic_master.c#L29)
 - [state machine based/non-state machine](src/logic_master.h#L21)

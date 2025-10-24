@@ -18,23 +18,17 @@
 
 void main (void) 
 {
-    MODIFY_HIRC(HIRC_24);
-    drvInit();
-    
-    logicMasterInit();
-    EA = 1;
-    while(1);
-}
-
-#include "driver.h"
-#include "logic_master.h"
-
-void main (void) 
-{
-	MODIFY_HIRC(HIRC_24);
 	drvInit();
 	
 	logicMasterInit();
 	EA = 1;
-	while(1);
+	while(1)
+	{
+		//drvLed1Byte(0xFF, 0x00, 0x00);
+		
+		//Timer0_Delay(24000000,1,1000);
+	}
 }
+
+
+

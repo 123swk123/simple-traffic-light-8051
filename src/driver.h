@@ -21,13 +21,7 @@
 #define BYTES_PER_LED		3
 #define TRAFFIC_TICK_RESOLUTION				1		/*1 second; min:1s, max:50s*/
 
-typedef uint8_t tTrafficLED[BYTES_PER_LED];
-
-extern const tTrafficLED code TRAFFIC_STOP_LED_COLOR;
-extern const tTrafficLED code TRAFFIC_WAIT_LED_COLOR;
-extern const tTrafficLED code TRAFFIC_GO_LED_COLOR;
-
 void drvInit(void);
-extern void drvLed1Byte(uint8_t val);
+extern void drvLed1Byte(uint8_t r,uint8_t g,uint8_t b);
 
 #endif

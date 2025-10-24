@@ -13,7 +13,8 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
  
-#pragma SRC
+//#pragma SRC
+//#pragma NOREGPARMS
 
 #include "MS51_16K.H"
 
@@ -31,7 +32,7 @@ bit length: 1250ns @ 24MHz => 30cyc
 BIT High 1: 750ns @ 24MHz => 18cyc(-12)
 BIT Low  1: 330ns @ 24MHz => 8cyc(-22)
 */
-void drvLed1Byte(uint8_t val)
+void drvLed1Byte(uint8_t r,uint8_t g,uint8_t b)
 {
 #pragma ASM
 	WAIT_CYC MACRO X
@@ -40,46 +41,68 @@ void drvLed1Byte(uint8_t val)
 		ENDM
 	ENDM
 	
-	EMIT_BIT MACRO X, Y
-		bit&X:
+	EMIT_BIT MACRO Cl, X, Y
+		Cl&bit&X:
 			SETB P0.0							
 			//WAIT_CYC 1								//BH=3,BL=3
-			JNB ACC.&X, bit&X&_snd0		//BH+5=8,BL+5=8
-			bit&X&_snd1:
+			JNB ACC.&X, Cl&bit&X&_snd0		//BH+5=8,BL+5=8
+			Cl&bit&X&_snd1:
+				WAIT_CYC 12							//BH+12=20
+				CLR P0.0								//BH+4=24
+				WAIT_CYC 2							//BH+2=26
+				SJMP Cl&bit&Y							//BH+3=29
+			Cl&bit&X&_snd0:
+				CLR P0.0								//BL+4=12
+				WAIT_CYC 17							//BL+17=29
+	ENDM
+	
+	EMIT_BIT_LAST MACRO Cl, X, Y
+		Cl&bit&X:
+			SETB P0.0							
+			//WAIT_CYC 1								//BH=3,BL=3
+			JNB ACC.&X, Cl&bit&X&_snd0		//BH+5=8,BL+5=8
+			Cl&bit&X&_snd1:
 				WAIT_CYC 10							//BH+8=18
 				CLR P0.0								//BH+4=22
-				WAIT_CYC 5							//BH+5=27
-				SJMP bit&Y							//BH+3=30
-			bit&X&_snd0:
-				CLR P0.0								//BL+4=12
-				WAIT_CYC 18							//BL+18=30
-	ENDM
-	
-	EMIT_BIT_LAST MACRO X, Y
-		bit&X:
-			SETB P0.0							
-			//WAIT_CYC 1								//BH=3,BL=3
-			JNB ACC.&X, bit&X&_snd0		//BH+5=8,BL+5=8
-			bit&X&_snd1:
-				WAIT_CYC 11							//BH+8=18
-				CLR P0.0								//BH+4=22
 				//WAIT_CYC 5							//BH+5=27
-				SJMP bit&Y							//BH+3=30
-			bit&X&_snd0:
+				SJMP Cl&bit&Y							//BH+3=30
+			Cl&bit&X&_snd0:
 				CLR P0.0								//BL+4=12
-				WAIT_CYC 5							//BL+18=30
+				WAIT_CYC 13							//BL+18=30
 	ENDM
 	
-	MOV ACC, r7
+	MOV ACC, r?040
+	EMIT_BIT r, 7, 6
+	EMIT_BIT r, 6, 5
+	EMIT_BIT r, 5, 4
+	EMIT_BIT r, 4, 3
+	EMIT_BIT r, 3, 2
+	EMIT_BIT r, 2, 1
+	EMIT_BIT r, 1, 0
+	EMIT_BIT_LAST r, 0, _end
+	rbit_end:
 	
-	EMIT_BIT 7, 6
-	EMIT_BIT 6, 5
-	EMIT_BIT 5, 4
-	EMIT_BIT 4, 3
-	EMIT_BIT 3, 2
-	EMIT_BIT 2, 1
-	EMIT_BIT 1, 0
-	EMIT_BIT_LAST 0, _end
-	bit_end:
+	MOV ACC, g?041
+	EMIT_BIT g, 7, 6
+	EMIT_BIT g, 6, 5
+	EMIT_BIT g, 5, 4
+	EMIT_BIT g, 4, 3
+	EMIT_BIT g, 3, 2
+	EMIT_BIT g, 2, 1
+	EMIT_BIT g, 1, 0
+	EMIT_BIT_LAST g, 0, _end
+	gbit_end:
+	
+	MOV ACC, b?042
+	EMIT_BIT b, 7, 6
+	EMIT_BIT b, 6, 5
+	EMIT_BIT b, 5, 4
+	EMIT_BIT b, 4, 3
+	EMIT_BIT b, 3, 2
+	EMIT_BIT b, 2, 1
+	EMIT_BIT b, 1, 0
+	EMIT_BIT_LAST b, 0, _end
+	bbit_end:
+	
 #pragma ENDASM
 }
