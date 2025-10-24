@@ -20,7 +20,7 @@ We use smart RGB single LED for each road to show the signal status to the user.
 These smart LEDs uses 3 color channel Red,Green & Blue; 8bit for each color channel so 24bit in total
 they are packed in the following format R7..R0, G7..G0, B7..B0
 
-The color code can be found here [driver.c](src/logic_master.c#L29), which implements the following table
+The color code can be found here [logic_master.c](src/logic_master.c#L29), which implements the following table
 
 |Signal status|Color|Color code|Const name|
 |-|-|-|-|
@@ -28,7 +28,7 @@ The color code can be found here [driver.c](src/logic_master.c#L29), which imple
 |WAIT|Orange|`{0x66, 0x33, 0}`|TRAFFIC_WAIT_LED_COLOR|
 |GO|Green|`{0, 0xFF, 0}`|TRAFFIC_GO_LED_COLOR|
 
-`void drvLed1Byte(uint8_t val)` function generates the low level smart LED communication signal @ 800KHz
+`void drvLed1Byte(uint8_t r, uint8_t g, uint8_t b)` function generates the low level smart LED communication signal @ 800KHz
 we use simple bit-bang written in 8051 assembly language. you can find the LED signal logic High and Low encoding scheme [here](https://akizukidenshi.com/goodsaffix/WS2811.pdf)
 
 ![Bit encoding](docs/LED_bit_encoding.png)
